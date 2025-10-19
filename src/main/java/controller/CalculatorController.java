@@ -22,6 +22,7 @@ public class CalculatorController {
             resultView.printResult(sum);
         } catch (IllegalArgumentException e) {
             resultView.printError(e.getMessage());
+            throw e;
         }
     }
 }
