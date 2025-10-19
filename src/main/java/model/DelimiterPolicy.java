@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DelimiterPolicy {
-    private static final Pattern CUSTOM = Pattern.compile("^//(.)\\n(.*)$", Pattern.DOTALL);
+    private static final Pattern CUSTOM = Pattern.compile("^//([^0-9])\\n(.*)$", Pattern.DOTALL);
     private static final String DEFAULT_REGEX = "[,:]";
 
     public Result resolve(String raw) {
@@ -15,6 +15,9 @@ public class DelimiterPolicy {
             String body = m.group(2);
             String combined = DEFAULT_REGEX + "|" + custom;
             return new Result(body, combined);
+        }
+        if(normalized.startsWith("//")) {
+            throw new IllegalArgumentException("커스텀 구분자는 숫자가 아닌 한 글자 문자여야 합니다.");
         }
         return new Result(raw, DEFAULT_REGEX);
     }
